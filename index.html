@@ -1,274 +1,535 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-900">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Feedback | Feedback Portal</title>
+    <title>Feedback Hub | Enterprise Feedback Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --star-color: #cbd5e1;
-            --star-active: #f59e0b;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        .category-card input:checked + div {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.12);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .feedback-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-            padding: 32px;
-            max-width: 500px;
-            width: 100%;
-            border: 1px solid var(--border-color);
-        }
-
-        .feedback-header {
-            margin-bottom: 24px;
-        }
-
-        .feedback-header h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 6px;
-        }
-
-        .feedback-header p {
-            color: var(--text-muted);
-            font-size: 0.925rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-dark);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.95rem;
-            background-color: #fff;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 110px;
-        }
-
-        /* Star Rating Controls */
-        .rating-wrapper {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: flex-end;
-            gap: 6px;
-        }
-
-        .rating-wrapper input {
-            display: none;
-        }
-
-        .rating-wrapper label {
-            font-size: 1.75rem;
-            color: var(--star-color);
-            cursor: pointer;
-            transition: color 0.15s ease;
-        }
-
-        .rating-wrapper input:checked ~ label,
-        .rating-wrapper label:hover,
-        .rating-wrapper label:hover ~ label {
-            color: var(--star-active);
-        }
-
-        .btn-submit {
-            width: 100%;
-            background-color: var(--primary);
+        .priority-btn input:checked + span {
+            border-color: var(--pill-color, #3b82f6);
+            background-color: var(--pill-bg, rgba(59, 130, 246, 0.15));
             color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 1rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
         }
 
-        .btn-submit:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .alert {
-            padding: 12px 16px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .alert-success {
-            background-color: #dcfce7;
-            color: #166534;
-            border: 1px solid #bbf7d0;
-        }
-
-        .alert-error {
-            background-color: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #f59e0b;
         }
     </style>
 </head>
-<body>
+<body class="h-full text-slate-100 flex flex-col antialiased selection:bg-brand-500 selection:text-white">
 
-<div class="feedback-card">
-    <div class="feedback-header">
-        <h2>We Value Your Feedback</h2>
-        <p>Let us know about your experience or how we can improve.</p>
-    </div>
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
+                    <i data-lucide="message-square-plus" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-lg tracking-tight text-white block leading-none">FeedbackHub</span>
+                    <span class="text-[10px] font-medium uppercase tracking-wider text-slate-400">Enterprise Feedback Portal</span>
+                </div>
+            </div>
 
-    <div id="alert-box" class="alert"></div>
-
-    <form id="feedbackForm" action="https://formsubmit.co/adamrayliffe@gmail.com" method="POST">
-        
-        <!-- FormSubmit Configurations -->
-        <input type="hidden" name="_subject" value="New Feedback Received!">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-
-        <!-- Honeypot field to prevent spam bots -->
-        <input type="text" name="_honey" style="display:none">
-
-        <div class="form-group">
-            <label>Overall Experience</label>
-            <div class="rating-wrapper">
-                <input type="radio" id="star5" name="Rating" value="5 Stars" required />
-                <label for="star5" title="5 stars">&#9733;</label>
-
-                <input type="radio" id="star4" name="Rating" value="4 Stars" />
-                <label for="star4" title="4 stars">&#9733;</label>
-
-                <input type="radio" id="star3" name="Rating" value="3 Stars" />
-                <label for="star3" title="3 stars">&#9733;</label>
-
-                <input type="radio" id="star2" name="Rating" value="2 Stars" />
-                <label for="star2" title="2 stars">&#9733;</label>
-
-                <input type="radio" id="star1" name="Rating" value="1 Star" />
-                <label for="star1" title="1 star">&#9733;</label>
+            <!-- Action buttons & Destination status -->
+            <div class="flex items-center gap-3">
+                <button type="button" onclick="togglePreviewModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 bg-slate-900 border border-slate-700/80 hover:bg-slate-800 hover:text-white transition shadow-sm">
+                    <i data-lucide="eye" class="w-3.5 h-3.5 text-brand-400"></i>
+                    <span class="hidden sm:inline">Payload Preview</span>
+                </button>
+                <div class="flex items-center gap-2 pl-3 border-l border-slate-800">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="text-xs text-slate-400 font-mono hidden md:inline">adamrayliffe@gmail.com</span>
+                </div>
             </div>
         </div>
+    </header>
 
-        <div class="form-group">
-            <label for="category">Feedback Topic</label>
-            <select id="category" name="Category" class="form-control" required>
-                <option value="" disabled selected>Select a category...</option>
-                <option value="General Feedback">General Feedback</option>
-                <option value="Bug / Technical Issue">Bug / Technical Issue</option>
-                <option value="Feature Request">Feature Request</option>
-                <option value="User Experience">User Experience</option>
-            </select>
+    <!-- Main Content Layout -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
+        <!-- UNIFIED FORM CONTAINER -->
+        <div class="glass-card rounded-2xl border border-slate-800/80 shadow-2xl overflow-hidden">
+            
+            <!-- Header Banner Inside Form -->
+            <div class="border-b border-slate-800/80 bg-slate-950/40 p-6 md:p-8 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-brand-500/10 text-brand-400 border border-brand-500/20 mb-3">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Direct Executive Response Channel
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Executive Feedback & Feature Intake</h1>
+                    <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+                        Submit structured feedback, technical bug reports, or feature proposals. Your response will be processed and routed immediately to <span class="text-slate-200 font-medium">adamrayliffe@gmail.com</span>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Single Unified Feedback Form -->
+            <form id="feedbackForm" action="https://formsubmit.co/adamrayliffe@gmail.com" method="POST" class="p-6 md:p-8 space-y-8">
+                <!-- Hidden FormSubmit Configurations -->
+                <input type="hidden" name="_subject" id="hiddenSubject" value="[LOW - Feature Request] New Submission">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_honey" style="display:none">
+                
+                <!-- Hidden Meta fields -->
+                <input type="hidden" name="Client OS" id="metaOS">
+                <input type="hidden" name="Client Browser" id="metaBrowser">
+                <input type="hidden" name="Screen Resolution" id="metaResolution">
+                <input type="hidden" name="Submitted At" id="metaTimestamp">
+
+                <!-- SECTION 1: CLASSIFICATION & URGENCY -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                        <h2 class="text-sm font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs flex items-center justify-center font-mono">1</span>
+                            Classification & Urgency
+                        </h2>
+                        <span class="text-xs text-slate-500">* Required</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Categories (Spans 2 cols) -->
+                        <div class="md:col-span-2 space-y-2">
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Select Category</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <!-- Category 1 -->
+                                <label class="category-card cursor-pointer">
+                                    <input type="radio" name="Category" value="Feature Request" class="sr-only" checked onchange="updateSubjectLine()">
+                                    <div class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 transition text-left h-full flex items-start gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-sm text-slate-200">Feature Request</div>
+                                            <div class="text-[11px] text-slate-400 mt-0.5 leading-tight">Propose enhancements or new capabilities.</div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <!-- Category 2 -->
+                                <label class="category-card cursor-pointer">
+                                    <input type="radio" name="Category" value="Bug Report" class="sr-only" onchange="updateSubjectLine()">
+                                    <div class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 transition text-left h-full flex items-start gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i data-lucide="bug" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-sm text-slate-200">Bug / Issue</div>
+                                            <div class="text-[11px] text-slate-400 mt-0.5 leading-tight">Report errors or broken functionality.</div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <!-- Category 3 -->
+                                <label class="category-card cursor-pointer">
+                                    <input type="radio" name="Category" value="UX & Performance" class="sr-only" onchange="updateSubjectLine()">
+                                    <div class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 transition text-left h-full flex items-start gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i data-lucide="zap" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-sm text-slate-200">UX & Design</div>
+                                            <div class="text-[11px] text-slate-400 mt-0.5 leading-tight">Usability feedback or layout refinements.</div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <!-- Category 4 -->
+                                <label class="category-card cursor-pointer">
+                                    <input type="radio" name="Category" value="General Feedback" class="sr-only" onchange="updateSubjectLine()">
+                                    <div class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 transition text-left h-full flex items-start gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i data-lucide="message-square" class="w-4 h-4"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-sm text-slate-200">General Inquiry</div>
+                                            <div class="text-[11px] text-slate-400 mt-0.5 leading-tight">General thoughts, questions, or praise.</div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Urgency Tier (Spans 1 col) -->
+                        <div class="space-y-2 flex flex-col justify-between">
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Urgency Tier</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 gap-2">
+                                <label class="priority-btn cursor-pointer" style="--pill-color: #38bdf8; --pill-bg: rgba(56, 189, 248, 0.15);">
+                                    <input type="radio" name="Priority" value="Low" class="sr-only" checked onchange="updateSubjectLine()">
+                                    <span class="block text-center py-2 px-3 rounded-xl border border-slate-700/80 bg-slate-900/60 text-xs font-medium text-slate-400 transition">Low Priority</span>
+                                </label>
+                                <label class="priority-btn cursor-pointer" style="--pill-color: #3b82f6; --pill-bg: rgba(59, 130, 246, 0.15);">
+                                    <input type="radio" name="Priority" value="Medium" class="sr-only" onchange="updateSubjectLine()">
+                                    <span class="block text-center py-2 px-3 rounded-xl border border-slate-700/80 bg-slate-900/60 text-xs font-medium text-slate-400 transition">Medium Priority</span>
+                                </label>
+                                <label class="priority-btn cursor-pointer" style="--pill-color: #f59e0b; --pill-bg: rgba(245, 158, 11, 0.15);">
+                                    <input type="radio" name="Priority" value="High" class="sr-only" onchange="updateSubjectLine()">
+                                    <span class="block text-center py-2 px-3 rounded-xl border border-slate-700/80 bg-slate-900/60 text-xs font-medium text-slate-400 transition">High Priority</span>
+                                </label>
+                                <label class="priority-btn cursor-pointer" style="--pill-color: #ef4444; --pill-bg: rgba(239, 68, 68, 0.15);">
+                                    <input type="radio" name="Priority" value="Critical" class="sr-only" onchange="updateSubjectLine()">
+                                    <span class="block text-center py-2 px-3 rounded-xl border border-slate-700/80 bg-slate-900/60 text-xs font-medium text-slate-400 transition">Critical Priority</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: SATISFACTION RATING -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                        <h2 class="text-sm font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs flex items-center justify-center font-mono">2</span>
+                            Satisfaction Score
+                        </h2>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 gap-3">
+                        <div class="star-rating flex flex-row-reverse gap-2">
+                            <input type="radio" id="star5" name="Rating" value="5 Stars (Delighted)" class="sr-only" required onchange="setRatingText('5/5 - Exceptional')">
+                            <label for="star5" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="5 Stars">&#9733;</label>
+
+                            <input type="radio" id="star4" name="Rating" value="4 Stars (Satisfied)" class="sr-only" onchange="setRatingText('4/5 - Good')">
+                            <label for="star4" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="4 Stars">&#9733;</label>
+
+                            <input type="radio" id="star3" name="Rating" value="3 Stars (Neutral)" class="sr-only" onchange="setRatingText('3/5 - Neutral')">
+                            <label for="star3" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="3 Stars">&#9733;</label>
+
+                            <input type="radio" id="star2" name="Rating" value="2 Stars (Unsatisfied)" class="sr-only" onchange="setRatingText('2/5 - Unsatisfied')">
+                            <label for="star2" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="2 Stars">&#9733;</label>
+
+                            <input type="radio" id="star1" name="Rating" value="1 Star (Poor)" class="sr-only" onchange="setRatingText('1/5 - Poor')">
+                            <label for="star1" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="1 Star">&#9733;</label>
+                        </div>
+                        <span id="ratingDisplay" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800/90 border border-slate-700/60 text-slate-300">
+                            Select Rating Score
+                        </span>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: FEEDBACK DETAILS -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                        <h2 class="text-sm font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs flex items-center justify-center font-mono">3</span>
+                            Detailed Narrative
+                        </h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="title_summary" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Headline Summary <span class="text-rose-500">*</span></label>
+                            <input type="text" id="title_summary" name="Subject Summary" placeholder="Brief, clear headline summarizing your submission..." required oninput="updateSubjectLine()"
+                                class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label for="detailed_message" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Comprehensive Feedback <span class="text-rose-500">*</span></label>
+                                <span id="charCount" class="text-[11px] text-slate-500 font-mono">0 / 2000</span>
+                            </div>
+                            <textarea id="detailed_message" name="Message" rows="5" maxlength="2000" placeholder="Please elaborate on your feedback. For bug reports, list steps to reproduce. For feature requests, describe the target outcome..." required oninput="updateCharCount()"
+                                class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition resize-y"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: SENDER DETAILS & DIAGNOSTICS -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                        <h2 class="text-sm font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs flex items-center justify-center font-mono">4</span>
+                            Sender Information & Context
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="sender_name" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Your Full Name <span class="text-rose-500">*</span></label>
+                            <div class="relative">
+                                <i data-lucide="user" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500"></i>
+                                <input type="text" id="sender_name" name="Name" placeholder="e.g. Sarah Jenkins" required
+                                    class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="sender_email" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Work Email Address <span class="text-rose-500">*</span></label>
+                            <div class="relative">
+                                <i data-lucide="mail" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500"></i>
+                                <input type="email" id="sender_email" name="email" placeholder="sarah@company.com" required
+                                    class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Environment Metadata Diagnostic Pill -->
+                    <div class="bg-slate-950/60 rounded-xl p-3.5 border border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+                            <span>System context auto-attached to assist technical review:</span>
+                        </div>
+                        <span id="metaSummaryPill" class="font-mono text-[11px] text-slate-300 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md">Detecting environment...</span>
+                    </div>
+                </div>
+
+                <!-- ALERT BOX -->
+                <div id="alertBox" class="hidden p-4 rounded-xl border text-sm font-medium transition-all"></div>
+
+                <!-- SUBMIT ACTIONS -->
+                <div class="pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-xs text-slate-500 flex items-center gap-1.5">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
+                        <span>Direct encrypted transmission via FormSubmit</span>
+                    </div>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <button type="button" onclick="togglePreviewModal()" class="w-1/2 sm:w-auto px-5 py-3 rounded-xl border border-slate-700/80 text-sm font-medium text-slate-300 hover:bg-slate-800/80 transition">
+                            Preview Payload
+                        </button>
+                        <button type="submit" id="submitBtn" class="w-1/2 sm:w-auto flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-brand-500/25 active:scale-[0.99] transition-all disabled:opacity-50">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span>Transmit Feedback</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
 
-        <div class="form-group">
-            <label for="sender_name">Your Name</label>
-            <input type="text" id="sender_name" name="Name" class="form-control" placeholder="John Doe" required />
+    </main>
+
+    <!-- EMAIL PAYLOAD PREVIEW MODAL -->
+    <div id="previewModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="mail-search" class="w-5 h-5 text-brand-500"></i>
+                    <span class="font-semibold text-sm text-slate-200">FormSubmit Email Payload Preview</span>
+                </div>
+                <button type="button" onclick="togglePreviewModal()" class="text-slate-400 hover:text-white transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto space-y-4 font-mono text-xs">
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-1 text-slate-300">
+                    <div><span class="text-slate-500">To:</span> adamrayliffe@gmail.com</div>
+                    <div><span class="text-slate-500">Subject:</span> <span id="prevSubject" class="text-brand-400">--</span></div>
+                    <div><span class="text-slate-500">Reply-To:</span> <span id="prevReply">--</span></div>
+                </div>
+
+                <div class="border border-slate-800 rounded-lg p-4 bg-slate-950/60 space-y-3 font-sans text-sm text-slate-300">
+                    <div class="font-bold text-slate-100 text-base border-b border-slate-800 pb-2">Feedback Summary Data</div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div><span class="text-slate-500 block">Category:</span> <span id="prevCategory" class="font-semibold text-slate-200">--</span></div>
+                        <div><span class="text-slate-500 block">Priority:</span> <span id="prevPriority" class="font-semibold text-slate-200">--</span></div>
+                        <div><span class="text-slate-500 block">Rating:</span> <span id="prevRating" class="font-semibold text-slate-200">--</span></div>
+                        <div><span class="text-slate-500 block">Sender Name:</span> <span id="prevName" class="font-semibold text-slate-200">--</span></div>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800">
+                        <span class="text-slate-500 text-xs block mb-1">Message Body:</span>
+                        <div id="prevMessage" class="bg-slate-900 p-3 rounded text-slate-200 whitespace-pre-wrap text-xs">--</div>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-500">
+                        <div>OS/Browser: <span id="prevEnv">--</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-800 bg-slate-950 flex justify-end">
+                <button type="button" onclick="togglePreviewModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg">
+                    Close Preview
+                </button>
+            </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="sender_email">Email Address</label>
-            <input type="email" id="sender_email" name="email" class="form-control" placeholder="john@example.com" required />
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div>&copy; 2026 FeedbackHub Platform. Direct email routing active.</div>
+            <div class="flex items-center gap-4">
+                <span class="hover:text-slate-400 transition cursor-pointer">Privacy Standard</span>
+                <span class="hover:text-slate-400 transition cursor-pointer">Terms of Service</span>
+            </div>
         </div>
+    </footer>
 
-        <div class="form-group">
-            <label for="message">Detailed Feedback</label>
-            <textarea id="message" name="Message" class="form-control" placeholder="Please describe your thoughts or issue in detail..." required></textarea>
-        </div>
+    <!-- LOGIC -->
+    <script>
+        /* Initialize Lucide Icons */
+        lucide.createIcons();
 
-        <button type="submit" class="btn-submit" id="submitBtn">Submit Feedback</button>
-    </form>
-</div>
+        /* Environment Detection */
+        function detectEnvironment() {
+            const ua = navigator.userAgent;
+            let os = "Unknown OS";
+            if (ua.indexOf("Win") != -1) os = "Windows";
+            if (ua.indexOf("Mac") != -1) os = "macOS";
+            if (ua.indexOf("Linux") != -1) os = "Linux";
+            if (ua.indexOf("Android") != -1) os = "Android";
+            if (ua.indexOf("like Mac") != -1) os = "iOS";
 
-<script>
-    const form = document.getElementById('feedbackForm');
-    const alertBox = document.getElementById('alert-box');
-    const submitBtn = document.getElementById('submitBtn');
+            let browser = "Unknown Browser";
+            if (ua.indexOf("Chrome") != -1) browser = "Google Chrome";
+            else if (ua.indexOf("Safari") != -1) browser = "Apple Safari";
+            else if (ua.indexOf("Firefox") != -1) browser = "Mozilla Firefox";
+            else if (ua.indexOf("Edg") != -1) browser = "Microsoft Edge";
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Sending...';
-        alertBox.style.display = 'none';
+            const res = `${window.screen.width}x${window.screen.height}`;
+            const time = new Date().toISOString();
 
-        const formData = new FormData(form);
+            document.getElementById('metaOS').value = os;
+            document.getElementById('metaBrowser').value = browser;
+            document.getElementById('metaResolution').value = res;
+            document.getElementById('metaTimestamp').value = time;
 
-        try {
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                alertBox.className = 'alert alert-success';
-                alertBox.innerText = 'Thank you! Your feedback has been sent successfully.';
-                alertBox.style.display = 'block';
-                form.reset();
-            } else {
-                alertBox.className = 'alert alert-error';
-                alertBox.innerText = 'There was a problem submitting your feedback. Please try again.';
-                alertBox.style.display = 'block';
-            }
-        } catch (error) {
-            alertBox.className = 'alert alert-error';
-            alertBox.innerText = 'Network error. Please check your connection and try again.';
-            alertBox.style.display = 'block';
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = 'Submit Feedback';
+            document.getElementById('metaSummaryPill').innerText = `${os} • ${browser} (${res})`;
         }
-    });
-</script>
 
+        /* Live Subject Updating */
+        function updateSubjectLine() {
+            const category = document.querySelector('input[name="Category"]:checked')?.value || 'Feedback';
+            const priority = document.querySelector('input[name="Priority"]:checked')?.value || 'Normal';
+            const summary = document.getElementById('title_summary').value.trim();
+
+            const fullSubject = `[${priority.toUpperCase()} - ${category}] ${summary || 'New Submission'}`;
+            document.getElementById('hiddenSubject').value = fullSubject;
+        }
+
+        function setRatingText(text) {
+            document.getElementById('ratingDisplay').innerText = text;
+        }
+
+        function updateCharCount() {
+            const len = document.getElementById('detailed_message').value.length;
+            document.getElementById('charCount').innerText = `${len} / 2000`;
+        }
+
+        /* Modal Controls */
+        function togglePreviewModal() {
+            const modal = document.getElementById('previewModal');
+            if (modal.classList.contains('hidden')) {
+                updateSubjectLine();
+                document.getElementById('prevSubject').innerText = document.getElementById('hiddenSubject').value;
+                document.getElementById('prevReply').innerText = document.getElementById('sender_email').value || 'N/A';
+                document.getElementById('prevCategory').innerText = document.querySelector('input[name="Category"]:checked')?.value || 'N/A';
+                document.getElementById('prevPriority').innerText = document.querySelector('input[name="Priority"]:checked')?.value || 'N/A';
+                document.getElementById('prevRating').innerText = document.querySelector('input[name="Rating"]:checked')?.value || 'Not rated';
+                document.getElementById('prevName').innerText = document.getElementById('sender_name').value || 'Anonymous';
+                document.getElementById('prevMessage').innerText = document.getElementById('detailed_message').value || '(No message provided)';
+                document.getElementById('prevEnv').innerText = document.getElementById('metaSummaryPill').innerText;
+
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        /* Handle AJAX Form Submission */
+        const form = document.getElementById('feedbackForm');
+        const alertBox = document.getElementById('alertBox');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            updateSubjectLine();
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Transmitting...`;
+            lucide.createIcons();
+            
+            alertBox.className = 'hidden';
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    confetti({
+                        particleCount: 80,
+                        spread: 60,
+                        origin: { y: 0.7 }
+                    });
+
+                    alertBox.className = 'p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-medium flex items-center gap-3';
+                    alertBox.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 flex-shrink-0"></i> 
+                                          <div><strong>Feedback Transmitted Successfully!</strong><br>A structured email has been dispatched to adamrayliffe@gmail.com.</div>`;
+                    
+                    form.reset();
+                    document.getElementById('ratingDisplay').innerText = 'Select Rating Score';
+                    updateCharCount();
+                } else {
+                    throw new Error('FormSubmit rejected payload');
+                }
+            } catch (err) {
+                alertBox.className = 'p-4 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 text-sm font-medium flex items-center gap-3';
+                alertBox.innerHTML = `<i data-lucide="alert-triangle" class="w-5 h-5 text-rose-400 flex-shrink-0"></i> 
+                                      <div><strong>Submission Error.</strong> Unable to reach destination server. Please check your network connection and try again.</div>`;
+            } finally {
+                alertBox.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>Transmit Feedback</span>`;
+                lucide.createIcons();
+            }
+        });
+
+        // On Load
+        detectEnvironment();
+    </script>
 </body>
 </html>
