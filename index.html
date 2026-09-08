@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-900">
+<html lang="en" class="h-full bg-slate-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feedback Hub | Enterprise Feedback Platform</title>
+    <title>Customer Service Feedback Form | TechGrid Systems</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,12 +12,12 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            900: '#1e3a8a',
+                            50: '#fef2f2',
+                            100: '#ffe4e4',
+                            600: '#990000',
+                            700: '#800000',
+                            800: '#660000',
+                            900: '#4d0000',
                         }
                     }
                 }
@@ -32,385 +32,235 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
-
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        :root {
+            --title-banner-bg: #8B0000;
+            --title-banner-hover: #660000;
         }
 
-        .category-card input:checked + div {
-            border-color: #3b82f6;
-            background-color: rgba(59, 130, 246, 0.12);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        .header-banner {
+            background-color: var(--title-banner-bg);
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            border-bottom-right-radius: 2.5rem;
         }
 
-        .priority-btn input:checked + span {
-            border-color: var(--pill-color, #3b82f6);
-            background-color: var(--pill-bg, rgba(59, 130, 246, 0.15));
+        .rating-radio input[type="radio"]:checked + label {
+            background-color: var(--title-banner-bg);
             color: #ffffff;
+            border-color: var(--title-banner-bg);
+            box-shadow: 0 2px 4px rgba(139, 0, 0, 0.25);
             font-weight: 600;
         }
 
-        .star-rating input:checked ~ label,
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-            color: #f59e0b;
+        .rating-radio label:hover {
+            border-color: var(--title-banner-bg);
+            color: var(--title-banner-bg);
         }
     </style>
 </head>
-<body class="h-full text-slate-100 flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+<body class="min-h-full bg-slate-100 text-slate-800 flex flex-col justify-between antialiased p-4 sm:p-6 lg:p-8">
 
-    <!-- Header / Navigation -->
-    <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
-                    <i data-lucide="message-square-plus" class="w-5 h-5 text-white"></i>
+    <div class="max-w-3xl w-full mx-auto bg-white rounded-2xl shadow-xl border border-slate-200/80 overflow-hidden">
+        
+        <!-- Header Banner with Logo -->
+        <div class="header-banner p-6 sm:p-8 text-white flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
+                    Customer Service<br/>Feedback Form
+                </h1>
+            </div>
+            <div class="bg-[#8B0000] p-1.5 sm:p-2 rounded-xl shadow-inner border border-white/20 self-end sm:self-auto flex items-center justify-center min-w-[120px] overflow-hidden">
+                <img src="https://techgrid-systems.github.io/techgrid-systems-logo/tgs.jpg" 
+                     alt="TechGrid Systems Logo" 
+                     class="h-10 sm:h-12 w-auto object-contain rounded bg-[#8B0000]"
+                     onerror="this.onerror=null; this.src='https://placehold.co/140x50/8B0000/FFFFFF?text=TECHGRID';">
+            </div>
+        </div>
+
+        <form id="feedbackForm" action="https://formsubmit.co/adamrayliffe@gmail.com" method="POST" class="p-6 sm:p-8 space-y-6">
+            <!-- Hidden FormSubmit Configurations -->
+            <input type="hidden" name="_subject" id="hiddenSubject" value="Customer Service Feedback Submission">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_honey" style="display:none">
+            
+            <!-- Metadata Diagnostic Fields -->
+            <input type="hidden" name="Client OS" id="metaOS">
+            <input type="hidden" name="Client Browser" id="metaBrowser">
+            <input type="hidden" name="Submitted At" id="metaTimestamp">
+
+            <!-- Name Input -->
+            <div>
+                <label for="sender_name" class="block text-sm font-semibold text-slate-700 mb-1.5">Name <span class="text-rose-600">*</span></label>
+                <input type="text" id="sender_name" name="Name" required placeholder="Enter your full name"
+                    class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-700/30 focus:border-brand-700 transition">
+            </div>
+
+            <!-- Phone & Email Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                    <label for="sender_phone" class="block text-sm font-semibold text-slate-700 mb-1.5">Phone</label>
+                    <input type="tel" id="sender_phone" name="Phone Number" placeholder="(555) 000-0000"
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-700/30 focus:border-brand-700 transition">
                 </div>
                 <div>
-                    <span class="font-bold text-lg tracking-tight text-white block leading-none">FeedbackHub</span>
-                    <span class="text-[10px] font-medium uppercase tracking-wider text-slate-400">Enterprise Feedback Portal</span>
+                    <label for="sender_email" class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address <span class="text-rose-600">*</span></label>
+                    <input type="email" id="sender_email" name="email" required placeholder="name@example.com"
+                        class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-700/30 focus:border-brand-700 transition">
                 </div>
             </div>
 
-            <!-- Action buttons & Destination status -->
-            <div class="flex items-center gap-3">
-                <button type="button" onclick="togglePreviewModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 bg-slate-900 border border-slate-700/80 hover:bg-slate-800 hover:text-white transition shadow-sm">
-                    <i data-lucide="eye" class="w-3.5 h-3.5 text-brand-400"></i>
-                    <span class="hidden sm:inline">Payload Preview</span>
-                </button>
-                <div class="flex items-center gap-2 pl-3 border-l border-slate-800">
-                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span class="text-xs text-slate-400 font-mono hidden md:inline">adamryanayliffe@gmail.com</span>
-                </div>
+            <!-- Instructions -->
+            <div class="pt-2 border-t border-slate-200">
+                <p class="text-xs sm:text-sm font-medium text-slate-600 leading-relaxed">
+                    Please rate each question on a scale of 1 to 5, with <strong>5 being the highest (excellent)</strong> and <strong>1 being the lowest (poor)</strong>.
+                </p>
             </div>
-        </div>
-    </header>
 
-    <!-- Main Content Layout -->
-    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+            <!-- QUESTION 1 -->
+            <div class="space-y-2 pt-1">
+                <p class="text-sm font-semibold text-slate-800">How satisfied are you with the support you received? <span class="text-rose-600">*</span></p>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="rating-radio inline-flex items-center gap-2">
+                        <input type="radio" id="q1_5" name="1. Support Satisfaction" value="5" class="sr-only" required>
+                        <label for="q1_5" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">5</label>
 
-        <!-- UNIFIED FORM CONTAINER -->
-        <div class="glass-card rounded-2xl border border-slate-800/80 shadow-2xl overflow-hidden">
-            
-            <!-- Header Banner Inside Form -->
-            <div class="border-b border-slate-800/80 bg-slate-950/40 p-6 md:p-8 relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="max-w-3xl">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-brand-500/10 text-brand-400 border border-brand-500/20 mb-3">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Direct Executive Response Channel
+                        <input type="radio" id="q1_4" name="1. Support Satisfaction" value="4" class="sr-only">
+                        <label for="q1_4" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">4</label>
+
+                        <input type="radio" id="q1_3" name="1. Support Satisfaction" value="3" class="sr-only">
+                        <label for="q1_3" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">3</label>
+
+                        <input type="radio" id="q1_2" name="1. Support Satisfaction" value="2" class="sr-only">
+                        <label for="q1_2" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">2</label>
+
+                        <input type="radio" id="q1_1" name="1. Support Satisfaction" value="1" class="sr-only">
+                        <label for="q1_1" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">1</label>
                     </div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Executive Feedback & Feature Intake</h1>
-                    <p class="mt-2 text-sm text-slate-400 leading-relaxed">
-                        Submit structured feedback, technical bug reports, or feature proposals. Your response will be processed and routed immediately to <span class="text-slate-200 font-medium">adamryanayliffe@gmail.com</span>.
-                    </p>
                 </div>
             </div>
 
-            <!-- Single Unified Feedback Form -->
-            <form id="feedbackForm" action="https://formsubmit.co/adamryanayliffe@gmail.com" method="POST" class="p-6 md:p-8 space-y-8">
-                <!-- Hidden FormSubmit Configurations -->
-                <input type="hidden" name="_subject" id="hiddenSubject" value="[LOW - Feature Request] New Submission">
-                <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_honey" style="display:none">
-                
-                <!-- Hidden Meta fields -->
-                <input type="hidden" name="Client OS" id="metaOS">
-                <input type="hidden" name="Client Browser" id="metaBrowser">
-                <input type="hidden" name="Screen Resolution" id="metaResolution">
-                <input type="hidden" name="Submitted At" id="metaTimestamp">
+            <!-- QUESTION 2 -->
+            <div class="space-y-2 pt-1">
+                <p class="text-sm font-semibold text-slate-800">How would you rate the promptness of our response? <span class="text-rose-600">*</span></p>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="rating-radio inline-flex items-center gap-2">
+                        <input type="radio" id="q2_5" name="2. Response Promptness" value="5" class="sr-only" required>
+                        <label for="q2_5" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">5</label>
 
-                <!-- SECTION 1: CLASSIFICATION & URGENCY -->
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-2">
-                            <span class="w-5 h-5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs flex items-center justify-center font-mono">1</span>
-                            Classification & Urgency
-                        </h2>
-                        <span class="text-xs text-slate-500">* Required</span>
-                    </div>
+                        <input type="radio" id="q2_4" name="2. Response Promptness" value="4" class="sr-only">
+                        <label for="q2_4" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">4</label>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Categories (Spans 2 cols) -->
-                        <div class="md:col-span-2 space-y-2">
-                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Select Category</label>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <!-- Category 1 -->
-                                <label class="category-card cursor-pointer">
-                                    <input type="radio" name="Category" value="Feature Request" class="sr-only" checked onchange="updateSubjectLine()">
-                                    <div class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 transition text-left h-full flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <i data-lucide="lightbulb" class="w-4 h-4"></i>
-                                        </div>
-                                        <div>
-                                            <div class="font-semibold text-sm text-slate-200">Feature Request</div>
-                                            <div class="text-[11px] text-slate-400 mt-0.5 leading-tight">Propose enhancements or new capabilities.</div>
-                                        </div>
-                                    </div>
-                                </label>
+                        <input type="radio" id="q2_3" name="2. Response Promptness" value="3" class="sr-only">
+                        <label for="q2_3" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">3</label>
 
-                                <!-- Category 2 -->
-                                <label class="category-card cursor-pointer">
-                                    <input type="radio" name="Category" value="Bug Report" class="sr-only" onchange="updateSubjectLine()">
-                                    <div class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 transition text-left h-full flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <i data-lucide="bug" class="w-4 h-4"></i>
-                                        </div>
-                                        <div>
-                                            <div class="font-semibold text-sm text-slate-200">Bug / Issue</div>
-                                            <div class="text-[11px] text-slate-400 mt-0.5 leading-tight">Report errors or broken functionality.</div>
-                                        </div>
-                                    </div>
-                                </label>
+                        <input type="radio" id="q2_2" name="2. Response Promptness" value="2" class="sr-only">
+                        <label for="q2_2" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">2</label>
 
-                                <!-- Category 3 -->
-                                <label class="category-card cursor-pointer">
-                                    <input type="radio" name="Category" value="UX & Performance" class="sr-only" onchange="updateSubjectLine()">
-                                    <div class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 transition text-left h-full flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <i data-lucide="zap" class="w-4 h-4"></i>
-                                        </div>
-                                        <div>
-                                            <div class="font-semibold text-sm text-slate-200">UX & Design</div>
-                                            <div class="text-[11px] text-slate-400 mt-0.5 leading-tight">Usability feedback or layout refinements.</div>
-                                        </div>
-                                    </div>
-                                </label>
-
-                                <!-- Category 4 -->
-                                <label class="category-card cursor-pointer">
-                                    <input type="radio" name="Category" value="General Feedback" class="sr-only" onchange="updateSubjectLine()">
-                                    <div class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 transition text-left h-full flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                            <i data-lucide="message-square" class="w-4 h-4"></i>
-                                        </div>
-                                        <div>
-                                            <div class="font-semibold text-sm text-slate-200">General Inquiry</div>
-                                            <div class="text-[11px] text-slate-400 mt-0.5 leading-tight">General thoughts, questions, or praise.</div>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Urgency Tier (Spans 1 col) -->
-                        <div class="space-y-2 flex flex-col justify-between">
-                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Urgency Tier</label>
-                            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 gap-2">
-                                <label class="priority-btn cursor-pointer" style="--pill-color: #38bdf8; --pill-bg: rgba(56, 189, 248, 0.15);">
-                                    <input type="radio" name="Priority" value="Low" class="sr-only" checked onchange="updateSubjectLine()">
-                                    <span class="block text-center py-2 px-3 rounded-xl border border-slate-700/80 bg-slate-900/60 text-xs font-medium text-slate-400 transition">Low Priority</span>
-                                </label>
-                                <label class="priority-btn cursor-pointer" style="--pill-color: #3b82f6; --pill-bg: rgba(59, 130, 246, 0.15);">
-                                    <input type="radio" name="Priority" value="Medium" class="sr-only" onchange="updateSubjectLine()">
-                                    <span class="block text-center py-2 px-3 rounded-xl border border-slate-700/80 bg-slate-900/60 text-xs font-medium text-slate-400 transition">Medium Priority</span>
-                                </label>
-                                <label class="priority-btn cursor-pointer" style="--pill-color: #f59e0b; --pill-bg: rgba(245, 158, 11, 0.15);">
-                                    <input type="radio" name="Priority" value="High" class="sr-only" onchange="updateSubjectLine()">
-                                    <span class="block text-center py-2 px-3 rounded-xl border border-slate-700/80 bg-slate-900/60 text-xs font-medium text-slate-400 transition">High Priority</span>
-                                </label>
-                                <label class="priority-btn cursor-pointer" style="--pill-color: #ef4444; --pill-bg: rgba(239, 68, 68, 0.15);">
-                                    <input type="radio" name="Priority" value="Critical" class="sr-only" onchange="updateSubjectLine()">
-                                    <span class="block text-center py-2 px-3 rounded-xl border border-slate-700/80 bg-slate-900/60 text-xs font-medium text-slate-400 transition">Critical Priority</span>
-                                </label>
-                            </div>
-                        </div>
+                        <input type="radio" id="q2_1" name="2. Response Promptness" value="1" class="sr-only">
+                        <label for="q2_1" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">1</label>
                     </div>
                 </div>
+            </div>
 
-                <!-- SECTION 2: SATISFACTION RATING -->
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-2">
-                            <span class="w-5 h-5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs flex items-center justify-center font-mono">2</span>
-                            Satisfaction Score
-                        </h2>
-                    </div>
+            <!-- QUESTION 3 -->
+            <div class="space-y-2 pt-1">
+                <p class="text-sm font-semibold text-slate-800">How would you rate the professionalism of our team? <span class="text-rose-600">*</span></p>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="rating-radio inline-flex items-center gap-2">
+                        <input type="radio" id="q3_5" name="3. Team Professionalism" value="5" class="sr-only" required>
+                        <label for="q3_5" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">5</label>
 
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 gap-3">
-                        <div class="star-rating flex flex-row-reverse gap-2">
-                            <input type="radio" id="star5" name="Rating" value="5 Stars (Delighted)" class="sr-only" required onchange="setRatingText('5/5 - Exceptional')">
-                            <label for="star5" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="5 Stars">&#9733;</label>
+                        <input type="radio" id="q3_4" name="3. Team Professionalism" value="4" class="sr-only">
+                        <label for="q3_4" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">4</label>
 
-                            <input type="radio" id="star4" name="Rating" value="4 Stars (Satisfied)" class="sr-only" onchange="setRatingText('4/5 - Good')">
-                            <label for="star4" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="4 Stars">&#9733;</label>
+                        <input type="radio" id="q3_3" name="3. Team Professionalism" value="3" class="sr-only">
+                        <label for="q3_3" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">3</label>
 
-                            <input type="radio" id="star3" name="Rating" value="3 Stars (Neutral)" class="sr-only" onchange="setRatingText('3/5 - Neutral')">
-                            <label for="star3" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="3 Stars">&#9733;</label>
+                        <input type="radio" id="q3_2" name="3. Team Professionalism" value="2" class="sr-only">
+                        <label for="q3_2" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">2</label>
 
-                            <input type="radio" id="star2" name="Rating" value="2 Stars (Unsatisfied)" class="sr-only" onchange="setRatingText('2/5 - Unsatisfied')">
-                            <label for="star2" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="2 Stars">&#9733;</label>
-
-                            <input type="radio" id="star1" name="Rating" value="1 Star (Poor)" class="sr-only" onchange="setRatingText('1/5 - Poor')">
-                            <label for="star1" class="cursor-pointer text-2xl text-slate-600 hover:text-amber-400 transition" title="1 Star">&#9733;</label>
-                        </div>
-                        <span id="ratingDisplay" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800/90 border border-slate-700/60 text-slate-300">
-                            Select Rating Score
-                        </span>
+                        <input type="radio" id="q3_1" name="3. Team Professionalism" value="1" class="sr-only">
+                        <label for="q3_1" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">1</label>
                     </div>
                 </div>
+            </div>
 
-                <!-- SECTION 3: FEEDBACK DETAILS -->
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-2">
-                            <span class="w-5 h-5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs flex items-center justify-center font-mono">3</span>
-                            Detailed Narrative
-                        </h2>
-                    </div>
+            <!-- QUESTION 4 -->
+            <div class="space-y-2 pt-1">
+                <p class="text-sm font-semibold text-slate-800">How would you rate our ability to meet your expectations? <span class="text-rose-600">*</span></p>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="rating-radio inline-flex items-center gap-2">
+                        <input type="radio" id="q4_5" name="4. Meeting Expectations" value="5" class="sr-only" required>
+                        <label for="q4_5" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">5</label>
 
-                    <div class="space-y-4">
-                        <div>
-                            <label for="title_summary" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Headline Summary <span class="text-rose-500">*</span></label>
-                            <input type="text" id="title_summary" name="Subject Summary" placeholder="Brief, clear headline summarizing your submission..." required oninput="updateSubjectLine()"
-                                class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
-                        </div>
+                        <input type="radio" id="q4_4" name="4. Meeting Expectations" value="4" class="sr-only">
+                        <label for="q4_4" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">4</label>
 
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <label for="detailed_message" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Comprehensive Feedback <span class="text-rose-500">*</span></label>
-                                <span id="charCount" class="text-[11px] text-slate-500 font-mono">0 / 2000</span>
-                            </div>
-                            <textarea id="detailed_message" name="Message" rows="5" maxlength="2000" placeholder="Please elaborate on your feedback. For bug reports, list steps to reproduce. For feature requests, describe the target outcome..." required oninput="updateCharCount()"
-                                class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition resize-y"></textarea>
-                        </div>
+                        <input type="radio" id="q4_3" name="4. Meeting Expectations" value="3" class="sr-only">
+                        <label for="q4_3" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">3</label>
+
+                        <input type="radio" id="q4_2" name="4. Meeting Expectations" value="2" class="sr-only">
+                        <label for="q4_2" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">2</label>
+
+                        <input type="radio" id="q4_1" name="4. Meeting Expectations" value="1" class="sr-only">
+                        <label for="q4_1" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">1</label>
                     </div>
                 </div>
+            </div>
 
-                <!-- SECTION 4: SENDER DETAILS & DIAGNOSTICS -->
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-brand-400 flex items-center gap-2">
-                            <span class="w-5 h-5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs flex items-center justify-center font-mono">4</span>
-                            Sender Information & Context
-                        </h2>
-                    </div>
+            <!-- QUESTION 5 -->
+            <div class="space-y-2 pt-1">
+                <p class="text-sm font-semibold text-slate-800">How would you rate your overall experience? <span class="text-rose-600">*</span></p>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="rating-radio inline-flex items-center gap-2">
+                        <input type="radio" id="q5_5" name="5. Overall Experience" value="5" class="sr-only" required>
+                        <label for="q5_5" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">5</label>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="sender_name" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Your Full Name <span class="text-rose-500">*</span></label>
-                            <div class="relative">
-                                <i data-lucide="user" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500"></i>
-                                <input type="text" id="sender_name" name="Name" placeholder="e.g. Sarah Jenkins" required
-                                    class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
-                            </div>
-                        </div>
+                        <input type="radio" id="q5_4" name="5. Overall Experience" value="4" class="sr-only">
+                        <label for="q5_4" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">4</label>
 
-                        <div>
-                            <label for="sender_email" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Work Email Address <span class="text-rose-500">*</span></label>
-                            <div class="relative">
-                                <i data-lucide="mail" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500"></i>
-                                <input type="email" id="sender_email" name="email" placeholder="sarah@company.com" required
-                                    class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
-                            </div>
-                        </div>
-                    </div>
+                        <input type="radio" id="q5_3" name="5. Overall Experience" value="3" class="sr-only">
+                        <label for="q5_3" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">3</label>
 
-                    <!-- Environment Metadata Diagnostic Pill -->
-                    <div class="bg-slate-950/60 rounded-xl p-3.5 border border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-400">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="cpu" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
-                            <span>System context auto-attached to assist technical review:</span>
-                        </div>
-                        <span id="metaSummaryPill" class="font-mono text-[11px] text-slate-300 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md">Detecting environment...</span>
+                        <input type="radio" id="q5_2" name="5. Overall Experience" value="2" class="sr-only">
+                        <label for="q5_2" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">2</label>
+
+                        <input type="radio" id="q5_1" name="5. Overall Experience" value="1" class="sr-only">
+                        <label for="q5_1" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-300 bg-slate-50 flex items-center justify-center text-sm font-medium cursor-pointer transition">1</label>
                     </div>
                 </div>
+            </div>
 
-                <!-- ALERT BOX -->
-                <div id="alertBox" class="hidden p-4 rounded-xl border text-sm font-medium transition-all"></div>
+            <!-- Textarea for Additional Suggestions -->
+            <div class="pt-2">
+                <label for="additional_feedback" class="block text-sm font-semibold text-slate-800 mb-2">
+                    Do you have any additional feedback or suggestions to help us improve?
+                </label>
+                <textarea id="additional_feedback" name="Additional Feedback & Suggestions" rows="4" placeholder="Write your thoughts or suggestions here..."
+                    class="w-full p-3.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-700/30 focus:border-brand-700 transition resize-y"></textarea>
+            </div>
 
-                <!-- SUBMIT ACTIONS -->
-                <div class="pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="text-xs text-slate-500 flex items-center gap-1.5">
-                        <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
-                        <span>Direct encrypted transmission via FormSubmit</span>
-                    </div>
-                    <div class="flex items-center gap-3 w-full sm:w-auto">
-                        <button type="button" onclick="togglePreviewModal()" class="w-1/2 sm:w-auto px-5 py-3 rounded-xl border border-slate-700/80 text-sm font-medium text-slate-300 hover:bg-slate-800/80 transition">
-                            Preview Payload
-                        </button>
-                        <button type="submit" id="submitBtn" class="w-1/2 sm:w-auto flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-brand-500/25 active:scale-[0.99] transition-all disabled:opacity-50">
-                            <i data-lucide="send" class="w-4 h-4"></i>
-                            <span>Transmit Feedback</span>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
+            <!-- Feedback Alert Box -->
+            <div id="alertBox" class="hidden p-4 rounded-xl text-sm font-medium transition-all"></div>
 
-    </main>
-
-    <!-- EMAIL PAYLOAD PREVIEW MODAL -->
-    <div id="previewModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
-            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="mail-search" class="w-5 h-5 text-brand-500"></i>
-                    <span class="font-semibold text-sm text-slate-200">FormSubmit Email Payload Preview</span>
-                </div>
-                <button type="button" onclick="togglePreviewModal()" class="text-slate-400 hover:text-white transition">
-                    <i data-lucide="x" class="w-5 h-5"></i>
+            <!-- Submission Row -->
+            <div class="pt-4 border-t border-slate-200 flex items-center justify-end">
+                <button type="submit" id="submitBtn" 
+                    class="w-full sm:w-auto px-8 py-3 rounded-xl bg-[#8B0000] hover:bg-[#660000] text-white font-semibold text-sm shadow-lg shadow-brand-900/10 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>Submit Feedback</span>
                 </button>
             </div>
-            
-            <div class="p-6 overflow-y-auto space-y-4 font-mono text-xs">
-                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-1 text-slate-300">
-                    <div><span class="text-slate-500">To:</span> adamryanayliffe@gmail.com</div>
-                    <div><span class="text-slate-500">Subject:</span> <span id="prevSubject" class="text-brand-400">--</span></div>
-                    <div><span class="text-slate-500">Reply-To:</span> <span id="prevReply">--</span></div>
-                </div>
-
-                <div class="border border-slate-800 rounded-lg p-4 bg-slate-950/60 space-y-3 font-sans text-sm text-slate-300">
-                    <div class="font-bold text-slate-100 text-base border-b border-slate-800 pb-2">Feedback Summary Data</div>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div><span class="text-slate-500 block">Category:</span> <span id="prevCategory" class="font-semibold text-slate-200">--</span></div>
-                        <div><span class="text-slate-500 block">Priority:</span> <span id="prevPriority" class="font-semibold text-slate-200">--</span></div>
-                        <div><span class="text-slate-500 block">Rating:</span> <span id="prevRating" class="font-semibold text-slate-200">--</span></div>
-                        <div><span class="text-slate-500 block">Sender Name:</span> <span id="prevName" class="font-semibold text-slate-200">--</span></div>
-                    </div>
-                    <div class="pt-2 border-t border-slate-800">
-                        <span class="text-slate-500 text-xs block mb-1">Message Body:</span>
-                        <div id="prevMessage" class="bg-slate-900 p-3 rounded text-slate-200 whitespace-pre-wrap text-xs">--</div>
-                    </div>
-                    <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-500">
-                        <div>OS/Browser: <span id="prevEnv">--</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-4 border-t border-slate-800 bg-slate-950 flex justify-end">
-                <button type="button" onclick="togglePreviewModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg">
-                    Close Preview
-                </button>
-            </div>
-        </div>
+        </form>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="mt-auto border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
-        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div>&copy; 2026 FeedbackHub Platform. Direct email routing active.</div>
-            <div class="flex items-center gap-4">
-                <span class="hover:text-slate-400 transition cursor-pointer">Privacy Standard</span>
-                <span class="hover:text-slate-400 transition cursor-pointer">Terms of Service</span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- LOGIC -->
+    <!-- Script Logic -->
     <script>
-        /* Initialize Lucide Icons */
         lucide.createIcons();
 
-        /* Environment Detection */
-        function detectEnvironment() {
+        // Detect Client Context
+        function initMeta() {
             const ua = navigator.userAgent;
             let os = "Unknown OS";
             if (ua.indexOf("Win") != -1) os = "Windows";
@@ -425,67 +275,24 @@
             else if (ua.indexOf("Firefox") != -1) browser = "Mozilla Firefox";
             else if (ua.indexOf("Edg") != -1) browser = "Microsoft Edge";
 
-            const res = `${window.screen.width}x${window.screen.height}`;
-            const time = new Date().toISOString();
-
             document.getElementById('metaOS').value = os;
             document.getElementById('metaBrowser').value = browser;
-            document.getElementById('metaResolution').value = res;
-            document.getElementById('metaTimestamp').value = time;
-
-            document.getElementById('metaSummaryPill').innerText = `${os} • ${browser} (${res})`;
+            document.getElementById('metaTimestamp').value = new Date().toLocaleString();
         }
 
-        /* Live Subject Updating */
-        function updateSubjectLine() {
-            const category = document.querySelector('input[name="Category"]:checked')?.value || 'Feedback';
-            const priority = document.querySelector('input[name="Priority"]:checked')?.value || 'Normal';
-            const summary = document.getElementById('title_summary').value.trim();
-
-            const fullSubject = `[${priority.toUpperCase()} - ${category}] ${summary || 'New Submission'}`;
-            document.getElementById('hiddenSubject').value = fullSubject;
-        }
-
-        function setRatingText(text) {
-            document.getElementById('ratingDisplay').innerText = text;
-        }
-
-        function updateCharCount() {
-            const len = document.getElementById('detailed_message').value.length;
-            document.getElementById('charCount').innerText = `${len} / 2000`;
-        }
-
-        /* Modal Controls */
-        function togglePreviewModal() {
-            const modal = document.getElementById('previewModal');
-            if (modal.classList.contains('hidden')) {
-                updateSubjectLine();
-                document.getElementById('prevSubject').innerText = document.getElementById('hiddenSubject').value;
-                document.getElementById('prevReply').innerText = document.getElementById('sender_email').value || 'N/A';
-                document.getElementById('prevCategory').innerText = document.querySelector('input[name="Category"]:checked')?.value || 'N/A';
-                document.getElementById('prevPriority').innerText = document.querySelector('input[name="Priority"]:checked')?.value || 'N/A';
-                document.getElementById('prevRating').innerText = document.querySelector('input[name="Rating"]:checked')?.value || 'Not rated';
-                document.getElementById('prevName').innerText = document.getElementById('sender_name').value || 'Anonymous';
-                document.getElementById('prevMessage').innerText = document.getElementById('detailed_message').value || '(No message provided)';
-                document.getElementById('prevEnv').innerText = document.getElementById('metaSummaryPill').innerText;
-
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
-
-        /* Handle AJAX Form Submission */
         const form = document.getElementById('feedbackForm');
         const alertBox = document.getElementById('alertBox');
         const submitBtn = document.getElementById('submitBtn');
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
-            updateSubjectLine();
+
+            // Set custom email subject line based on name
+            const nameVal = document.getElementById('sender_name').value.trim();
+            document.getElementById('hiddenSubject').value = `Customer Service Feedback - ${nameVal || 'Anonymous'}`;
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Transmitting...`;
+            submitBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Submitting...`;
             lucide.createIcons();
             
             alertBox.className = 'hidden';
@@ -501,35 +308,32 @@
 
                 if (response.ok) {
                     confetti({
-                        particleCount: 80,
+                        particleCount: 70,
                         spread: 60,
                         origin: { y: 0.7 }
                     });
 
-                    alertBox.className = 'p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-medium flex items-center gap-3';
-                    alertBox.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 flex-shrink-0"></i> 
-                                          <div><strong>Feedback Transmitted Successfully!</strong><br>A structured email has been dispatched to adamryanayliffe@gmail.com.</div>`;
+                    alertBox.className = 'p-4 rounded-xl border border-emerald-500/30 bg-emerald-50 text-emerald-800 text-sm font-medium flex items-center gap-3';
+                    alertBox.innerHTML = `<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 flex-shrink-0"></i> 
+                                          <div><strong>Thank you! Your feedback has been submitted.</strong></div>`;
                     
                     form.reset();
-                    document.getElementById('ratingDisplay').innerText = 'Select Rating Score';
-                    updateCharCount();
                 } else {
-                    throw new Error('FormSubmit rejected payload');
+                    throw new Error('FormSubmit rejection');
                 }
             } catch (err) {
-                alertBox.className = 'p-4 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 text-sm font-medium flex items-center gap-3';
-                alertBox.innerHTML = `<i data-lucide="alert-triangle" class="w-5 h-5 text-rose-400 flex-shrink-0"></i> 
-                                      <div><strong>Submission Error.</strong> Unable to reach destination server. Please check your network connection and try again.</div>`;
+                alertBox.className = 'p-4 rounded-xl border border-rose-500/30 bg-rose-50 text-rose-800 text-sm font-medium flex items-center gap-3';
+                alertBox.innerHTML = `<i data-lucide="alert-triangle" class="w-5 h-5 text-rose-600 flex-shrink-0"></i> 
+                                      <div><strong>Submission Error.</strong> Could not dispatch form. Please check your network connection and try again.</div>`;
             } finally {
                 alertBox.classList.remove('hidden');
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>Transmit Feedback</span>`;
+                submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i><span>Submit Feedback</span>`;
                 lucide.createIcons();
             }
         });
 
-        // On Load
-        detectEnvironment();
+        initMeta();
     </script>
 </body>
 </html>
